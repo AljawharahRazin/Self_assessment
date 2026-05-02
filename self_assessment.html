@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التقييم المعكوس</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b4b;
+    --navy-mid: #152060;
+    --navy-light: #1e2f7a;
+    --gold: #c9a227;
+    --gold-light: #e8c044;
+    --gold-pale: #f5e4a0;
+    --cream: #fdf8ee;
+    --red-soft: #c0392b;
+    --green-soft: #1a7a4a;
+    --white: #ffffff;
+    --text-muted: rgba(255,255,255,0.65);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Tajawal', 'Cairo', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV DOTS ── */
+  .nav-dots {
+    position: fixed;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(201,162,39,0.3);
+    border: 1.5px solid var(--gold);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .nav-dot.active { background: var(--gold); transform: scale(1.4); }
+
+  /* ── SECTIONS ── */
+  section {
+    min-height: 100vh;
+    padding: 4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* GOLD BORDER DECORATION */
+  section::before {
+    content: '';
+    position: absolute;
+    inset: 16px;
+    border: 1px solid rgba(201,162,39,0.18);
+    border-radius: 4px;
+    pointer-events: none;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    background: radial-gradient(ellipse at 60% 40%, #1e2f7a 0%, #0a1235 70%);
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  #hero .star-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(201,162,39,0.15) 1px, transparent 1px),
+      radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px, 20px 20px;
+    background-position: 0 0, 10px 10px;
+    animation: drift 20s linear infinite;
+  }
+  @keyframes drift { to { background-position: 40px 40px, 50px 50px; } }
+
+  .hero-tag {
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+  .hero-title-1 {
+    font-size: clamp(3.5rem, 14vw, 6rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1;
+    text-shadow: 0 0 60px rgba(201,162,39,0.2);
+  }
+  .hero-title-2 {
+    font-size: clamp(3rem, 12vw, 5rem);
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(201,162,39,0.4);
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 320px;
+    line-height: 1.8;
+  }
+  .hero-finland {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(201,162,39,0.12);
+    border: 1px solid rgba(201,162,39,0.3);
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.85rem;
+    color: var(--gold-light);
+    animation: pulse-border 3s ease-in-out infinite;
+  }
+  @keyframes pulse-border {
+    0%,100% { box-shadow: 0 0 0 0 rgba(201,162,39,0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(201,162,39,0); }
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    color: var(--gold);
+    opacity: 0.6;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(8px);} }
+  .scroll-arrow { font-size: 1.2rem; }
+
+  /* ── SECTION HEADERS ── */
+  .sec-label {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+  }
+  .sec-title {
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  .gold-line {
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    border-radius: 2px;
+    margin-bottom: 2rem;
+  }
+
+  /* ── QUESTION SECTION ── */
+  #question {
+    background: linear-gradient(160deg, #0f1e55 0%, #0a1235 100%);
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+  .big-question {
+    font-size: clamp(1.5rem, 6vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.5;
+  }
+  .question-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+  }
+  .q-pill {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1.5px solid rgba(201,162,39,0.3);
+    background: rgba(201,162,39,0.06);
+    color: var(--gold-light);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .q-pill:hover {
+    background: rgba(201,162,39,0.15);
+    border-color: var(--gold);
+    transform: scale(1.02);
+  }
+
+  /* ── SCALE SECTION ── */
+  #scale {
+    background: linear-gradient(135deg, #0e1c50 0%, #091230 100%);
+    gap: 2rem;
+  }
+  .scale-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .scale-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .scale-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .scale-card:nth-child(1) { background: rgba(192,57,43,0.12); border-color: rgba(192,57,43,0.3); }
+  .scale-card:nth-child(1)::before { background: rgba(192,57,43,0.1); }
+  .scale-card:nth-child(2) { background: rgba(211,84,0,0.12); border-color: rgba(211,84,0,0.3); }
+  .scale-card:nth-child(3) { background: rgba(243,156,18,0.12); border-color: rgba(243,156,18,0.3); }
+  .scale-card:nth-child(4) { background: rgba(39,174,96,0.12); border-color: rgba(39,174,96,0.3); }
+  .scale-card:nth-child(5) { background: rgba(26,122,74,0.18); border-color: rgba(26,122,74,0.4); }
+  .scale-card:hover::before { opacity: 1; }
+  .scale-card:hover { transform: translateX(-4px); }
+  .scale-card.selected { transform: translateX(-6px) scale(1.01); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .scale-num {
+    font-size: 2rem;
+    font-weight: 900;
+    min-width: 2.5rem;
+    text-align: center;
+  }
+  .scale-card:nth-child(1) .scale-num { color: #e74c3c; }
+  .scale-card:nth-child(2) .scale-num { color: #e67e22; }
+  .scale-card:nth-child(3) .scale-num { color: #f39c12; }
+  .scale-card:nth-child(4) .scale-num { color: #2ecc71; }
+  .scale-card:nth-child(5) .scale-num { color: #27ae60; }
+  .scale-text { font-size: 1rem; font-weight: 600; }
+  .scale-note {
+    font-size: 0.8rem;
+    color: var(--gold);
+    text-align: center;
+    padding: 0.8rem;
+    background: rgba(201,162,39,0.08);
+    border-radius: 8px;
+    border: 1px solid rgba(201,162,39,0.2);
+  }
+
+  /* ── INTRO SECTION ── */
+  #intro {
+    background: linear-gradient(170deg, #0c1840 0%, #0a1235 100%);
+    gap: 1.5rem;
+  }
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(201,162,39,0.12), rgba(201,162,39,0.04));
+    border: 1px solid rgba(201,162,39,0.35);
+    border-right: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.8;
+    color: var(--gold-pale);
+  }
+  .intro-para {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 2;
+  }
+  .researcher-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+  }
+  .researcher-icon {
+    width: 50px; height: 50px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .researcher-name { font-weight: 700; font-size: 0.95rem; }
+  .researcher-role { font-size: 0.78rem; color: var(--gold); margin-top: 0.2rem; }
+
+  /* ── COMPARISON SECTION ── */
+  #comparison {
+    background: linear-gradient(160deg, #0e1c50 0%, #08112e 100%);
+    gap: 1.5rem;
+  }
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .compare-header {
+    padding: 0.7rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-align: center;
+  }
+  .compare-header.traditional {
+    background: rgba(192,57,43,0.25);
+    color: #ff7675;
+    border: 1px solid rgba(192,57,43,0.4);
+  }
+  .compare-header.flipped {
+    background: rgba(26,122,74,0.25);
+    color: #55efc4;
+    border: 1px solid rgba(39,174,96,0.4);
+  }
+  .compare-item {
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .compare-item.bad {
+    background: rgba(192,57,43,0.08);
+    border: 1px solid rgba(192,57,43,0.2);
+    color: rgba(255,255,255,0.8);
+  }
+  .compare-item.good {
+    background: rgba(26,122,74,0.1);
+    border: 1px solid rgba(39,174,96,0.2);
+    color: rgba(255,255,255,0.85);
+  }
+  .compare-icon { flex-shrink: 0; font-size: 0.9rem; margin-top: 0.1rem; }
+  .compare-footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--gold);
+    padding: 0.8rem;
+    background: rgba(201,162,39,0.06);
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  /* ── BELIEFS SECTION ── */
+  #beliefs {
+    background: linear-gradient(150deg, #0a1535 0%, #0f1e55 100%);
+    gap: 1.5rem;
+  }
+  .belief-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,162,39,0.15);
+    border-radius: 12px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .belief-card::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s ease;
+  }
+  .belief-card:hover { background: rgba(201,162,39,0.06); transform: translateX(-3px); }
+  .belief-card:hover::after { transform: scaleY(1); }
+  .belief-num {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    font-weight: 900;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+  .belief-content { flex: 1; }
+  .belief-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .belief-reflect {
+    font-size: 0.78rem;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  /* ── PRACTICAL SECTION ── */
+  #practical {
+    background: linear-gradient(160deg, #0c1840 0%, #091230 100%);
+    gap: 1.5rem;
+  }
+  .practical-intro {
+    background: rgba(201,162,39,0.1);
+    border: 1px solid rgba(201,162,39,0.3);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--gold-pale);
+    text-align: center;
+    font-style: italic;
+  }
+  .practical-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .step-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+  .step-card:hover { background: rgba(201,162,39,0.06); border-color: rgba(201,162,39,0.25); }
+  .step-arrow { color: var(--gold); font-size: 1.2rem; flex-shrink: 0; }
+  .step-text { font-size: 0.95rem; font-weight: 600; }
+  .practical-note {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* ── TOOLS SECTION ── */
+  #tools {
+    background: linear-gradient(160deg, #0f1e55 0%, #0a1235 100%);
+    gap: 1.5rem;
+  }
+  .tools-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .tool-card {
+    padding: 1.2rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,162,39,0.2);
+    border-radius: 14px;
+    transition: all 0.3s;
+  }
+  .tool-card:hover { background: rgba(201,162,39,0.07); transform: scale(1.01); }
+  .tool-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+  .tool-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--gold), var(--navy-light));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .tool-name { font-size: 1rem; font-weight: 700; }
+  .tool-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; }
+
+  /* ── TEMPLATE SECTION ── */
+  #template {
+    background: linear-gradient(150deg, #0a1235 0%, #0e1c50 100%);
+    gap: 1.5rem;
+  }
+  .template-card {
+    background: rgba(255,255,255,0.96);
+    border-radius: 16px;
+    padding: 1.5rem;
+    color: var(--navy);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .template-title {
+    font-size: 1rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1.2rem;
+    color: var(--navy);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 0.5rem;
+  }
+  .template-q {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px dashed rgba(13,27,75,0.12);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .template-q:last-child { border-bottom: none; }
+  .template-q-num {
+    width: 22px; height: 22px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 900;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+  .template-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.8rem;
+    font-size: 0.75rem;
+  }
+  .template-table th {
+    background: var(--navy);
+    color: var(--gold);
+    padding: 0.4rem 0.5rem;
+    text-align: center;
+  }
+  .template-table td {
+    padding: 0.4rem 0.5rem;
+    border: 1px solid rgba(13,27,75,0.15);
+    text-align: center;
+    color: var(--navy);
+  }
+  .template-table tr:nth-child(even) td { background: rgba(13,27,75,0.04); }
+
+  /* ── RESULTS SECTION ── */
+  #results {
+    background: linear-gradient(160deg, #0e1c50 0%, #08112e 100%);
+    gap: 1.5rem;
+  }
+  .results-context {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .result-block {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(201,162,39,0.2);
+  }
+  .result-block-header {
+    background: rgba(201,162,39,0.12);
+    padding: 0.8rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold);
+    border-bottom: 1px solid rgba(201,162,39,0.2);
+  }
+  .result-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+  .stat-box {
+    padding: 1rem;
+    text-align: center;
+    border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat-box:last-child { border-left: none; }
+  .stat-num { font-size: 1.6rem; font-weight: 900; line-height: 1; }
+  .stat-label { font-size: 0.65rem; color: var(--text-muted); margin-top: 0.3rem; }
+  .stat-box.before .stat-num { color: #e74c3c; }
+  .stat-box.after .stat-num { color: #2ecc71; }
+  .stat-box.pct .stat-num { color: var(--gold); }
+
+  /* BAR CHART */
+  .bar-chart {
+    padding: 1.2rem;
+    background: rgba(255,255,255,0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .bar-row {
+    margin-bottom: 1rem;
+  }
+  .bar-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+  .bar-track { background: rgba(255,255,255,0.07); border-radius: 4px; height: 10px; position: relative; overflow: hidden; }
+  .bar-before, .bar-after {
+    position: absolute; top: 0; left: 0; height: 100%;
+    border-radius: 4px;
+    transition: width 1.5s ease;
+  }
+  .bar-before { background: #e74c3c; }
+  .bar-after { background: #2ecc71; }
+  .bar-legend { display: flex; gap: 1rem; font-size: 0.7rem; margin-top: 0.5rem; justify-content: flex-end; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-left: 4px; }
+
+  /* ── FAQ SECTION ── */
+  #faq {
+    background: linear-gradient(150deg, #0c1840 0%, #0f1e55 100%);
+    gap: 1.5rem;
+  }
+  .faq-item {
+    border: 1px solid rgba(201,162,39,0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .faq-question {
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.03);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: background 0.3s;
+    user-select: none;
+  }
+  .faq-question:hover { background: rgba(201,162,39,0.06); }
+  .faq-icon {
+    color: var(--gold);
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    padding: 0 1.2rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+  }
+  .faq-item.open .faq-answer { max-height: 200px; padding: 1rem 1.2rem; }
+
+  /* ── FINALE SECTION ── */
+  #finale {
+    background: radial-gradient(ellipse at 50% 30%, #1e2f7a 0%, #0a1235 70%);
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+  #finale .star-bg {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(201,162,39,0.12) 1px, transparent 1px);
+    background-size: 35px 35px;
+    animation: drift 25s linear infinite reverse;
+  }
+  .finale-reminders {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 380px;
+  }
+  .reminder-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.3rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: transform 0.3s;
+  }
+  .reminder-pill:hover { transform: scale(1.02); }
+  .reminder-pill:nth-child(1) { background: rgba(201,162,39,0.12); border: 1px solid rgba(201,162,39,0.3); color: var(--gold-pale); }
+  .reminder-pill:nth-child(2) { background: rgba(201,162,39,0.18); border: 1px solid rgba(201,162,39,0.4); color: var(--gold-light); }
+  .reminder-pill:nth-child(3) { background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.25); color: #ff9f8c; }
+  .reminder-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .finale-quote {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1.6;
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .fade-up:nth-child(2) { transition-delay: 0.1s; }
+  .fade-up:nth-child(3) { transition-delay: 0.2s; }
+  .fade-up:nth-child(4) { transition-delay: 0.3s; }
+  .fade-up:nth-child(5) { transition-delay: 0.4s; }
+  .fade-up:nth-child(6) { transition-delay: 0.5s; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--navy); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* Section divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.2;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+  <div class="star-bg"></div>
+  <p class="hero-tag fade-up">✦ نموذج تعليمي فنلندي ✦</p>
+  <h1 class="hero-title-1 fade-up">التقييم</h1>
+  <h2 class="hero-title-2 fade-up">المعكوس</h2>
+  <p class="hero-subtitle fade-up">حين يصبح الطالب محور عملية التقويم لا موضوعاً لها</p>
+  <div class="hero-finland fade-up">✨ في فنلندا، التقييم رحلة اكتشاف الذات وتطويرها</div>
+  <div class="scroll-hint">
+    <span class="scroll-arrow">↓</span>
+    <span>اسحب للأسفل</span>
+  </div>
+</section>
+
+<!-- ═══════════════ QUESTION ═══════════════ -->
+<section id="question">
+  <p class="sec-label fade-up">نقطة تفكير</p>
+  <h2 class="big-question fade-up">🤔 في رأيك، ما الهدف الحقيقي من التقييم؟</h2>
+  <div class="question-pills fade-up">
+    <div class="q-pill" onclick="selectPill(this)">📊 قياس مستوى الطالب</div>
+    <div class="q-pill" onclick="selectPill(this)">🌱 تطوير الطالب ومساعدته</div>
+    <div class="q-pill" onclick="selectPill(this)">📝 إصدار درجات رسمية</div>
+    <div class="q-pill" onclick="selectPill(this)">🔍 الاثنان معاً</div>
+  </div>
+</section>
+
+<!-- ═══════════════ SCALE BEFORE ═══════════════ -->
+<section id="scale">
+  <p class="sec-label fade-up">قبل أن نبدأ</p>
+  <h2 class="sec-title fade-up">أين أنت الآن مع التقييم المعكوس؟</h2>
+  <div class="gold-line fade-up"></div>
+  <div class="scale-cards fade-up" id="scaleCards">
+    <div class="scale-card" onclick="selectScale(this)">
+      <span class="scale-num">١</span>
+      <span class="scale-text">لم أجرِّبه</span>
+    </div>
+    <div class="scale-card" onclick="selectScale(this)">
+      <span class="scale-num">٢</span>
+      <span class="scale-text">بدأت أفكر</span>
+    </div>
+    <div class="scale-card" onclick="selectScale(this)">
+      <span class="scale-num">٣</span>
+      <span class="scale-text">جرّبت أحياناً</span>
+    </div>
+    <div class="scale-card" onclick="selectScale(this)">
+      <span class="scale-num">٤</span>
+      <span class="scale-text">أطبّقه أحياناً</span>
+    </div>
+    <div class="scale-card" onclick="selectScale(this)">
+      <span class="scale-num">٥</span>
+      <span class="scale-text">أطبّقه دائماً</span>
+    </div>
+  </div>
+  <p class="scale-note fade-up">🔄 سنعود لهذا المقياس في النهاية لنرى تغيّرك</p>
+</section>
+
+<!-- ═══════════════ INTRO ═══════════════ -->
+<section id="intro">
+  <p class="sec-label fade-up">المقدمة</p>
+  <h2 class="sec-title fade-up">فلسفة التقييم الفنلندي</h2>
+  <div class="gold-line fade-up"></div>
+  <div class="highlight-box fade-up">
+    في فنلندا، لم يعد التقييم وسيلةً لتصنيف الطالب، بل أصبح رحلةً لاكتشاف الذات وتطويرها
+  </div>
+  <p class="intro-para fade-up">
+    نصّ قانون التعليم الأساسي الفنلندي على أن غاية التقييم الأولى هي تنمية مهارات التقييم الذاتي لدى الطالب، ودعمهم وتشجيعهم، لا إصدار أحكام عليهم.
+  </p>
+  <p class="intro-para fade-up">
+    يعتمد التعليم الفنلندي على التقويم المستمر والتقييم الذاتي، في تناغم تام مع روح التعلّم. هناك، حيث لا مكان للاختبارات الوطنية الموحدة، يُعاد تعريف النجاح: <strong style="color:var(--gold)">ليس بالفوز بل بالنمو، وليس بالدرجة بل بالفهم.</strong>
+  </p>
+  <div class="researcher-card fade-up">
+    <div class="researcher-icon">🎓</div>
+    <div>
+      <div class="researcher-name">ماريكا تويوفولا</div>
+      <div class="researcher-role">Marika Toivola — باحثة فنلندية، مؤسِّسة نموذج التقييم المعكوس</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ COMPARISON ═══════════════ -->
+<section id="comparison">
+  <p class="sec-label fade-up">مقارنة تفاعلية</p>
+  <h2 class="sec-title fade-up">النموذج الفنلندي vs النظام التقليدي</h2>
+  <div class="gold-line fade-up"></div>
+  <div class="compare-grid fade-up">
+    <div class="compare-header traditional">🏫 النظام التقليدي</div>
+    <div class="compare-header flipped">✨ التقييم المعكوس</div>
+    <div class="compare-item bad"><span class="compare-icon">✗</span>التركيز على الدرجة لا الفهم</div>
+    <div class="compare-item good"><span class="compare-icon">✓</span>الهدف: تحسين التعلم لا قياسه فقط</div>
+    <div class="compare-item bad"><span class="compare-icon">✗</span>٣ ساعات امتحان تحكم على ٣ أشهر تعلم</div>
+    <div class="compare-item good"><span class="compare-icon">✓</span>معلمة مرشدة — طالبة متعلمة نشطة</div>
+    <div class="compare-item bad"><span class="compare-icon">✗</span>الخطأ يُعاقب عليه لا يُستفاد منه</div>
+    <div class="compare-item good"><span class="compare-icon">✓</span>الخطأ جزء طبيعي من رحلة التعلم</div>
+    <div class="compare-item bad"><span class="compare-icon">✗</span>إهمال المهارات الحياتية</div>
+    <div class="compare-item good"><span class="compare-icon">✓</span>مهارات حقيقية + فهم أعمق</div>
+    <div class="compare-item bad"><span class="compare-icon">✗</span>المعلم هو المحكّم الوحيد</div>
+    <div class="compare-item good"><span class="compare-icon">✓</span>الطالب محور عملية التقويم</div>
+  </div>
+  <div class="compare-footer fade-up">✨ الهدف ليس الكمال، بل التقدم</div>
+</section>
+
+<!-- ═══════════════ BELIEFS ═══════════════ -->
+<section id="beliefs">
+  <p class="sec-label fade-up">الأساس</p>
+  <h2 class="sec-title fade-up">٤ قناعات قبل البدء</h2>
+  <div class="gold-line fade-up"></div>
+  <div class="fade-up">
+    <div class="belief-card" style="margin-bottom:0.8rem">
+      <div class="belief-num">١</div>
+      <div class="belief-content">
+        <div class="belief-title">الخطأ جزء من التعلم</div>
+        <div class="belief-reflect">💬 تأمل: متى كان آخر مرة أفدت من خطأ؟</div>
+      </div>
+    </div>
+    <div class="belief-card" style="margin-bottom:0.8rem">
+      <div class="belief-num">٢</div>
+      <div class="belief-content">
+        <div class="belief-title">لكل طالبة سرعة مختلفة</div>
+        <div class="belief-reflect">💬 تأمل: كيف تتعاملين مع الفروق الفردية؟</div>
+      </div>
+    </div>
+    <div class="belief-card" style="margin-bottom:0.8rem">
+      <div class="belief-num">٣</div>
+      <div class="belief-content">
+        <div class="belief-title">التقييم وسيلة لا غاية</div>
+        <div class="belief-reflect">💬 تأمل: هل التقييم عندك أداة تطوير أم حكم نهائي؟</div>
+      </div>
+    </div>
+    <div class="belief-card">
+      <div class="belief-num">٤</div>
+      <div class="belief-content">
+        <div class="belief-title">أنت مرشدة لا حَكم</div>
+        <div class="belief-reflect">💬 تأمل: كيف يشعر طالباتك عند تلقي التغذية الراجعة؟</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PRACTICAL ═══════════════ -->
+<section id="practical">
+  <p class="sec-label fade-up">خطوة عملية اليوم</p>
+  <h2 class="sec-title fade-up">ابدئي من هنا الآن</h2>
+  <div class="gold-line fade-up"></div>
+  <div class="practical-intro fade-up">
+    بدل: «هذا صح وهذا خطأ» — اسألي هذه الأسئلة الثلاثة ✏️
+  </div>
+  <div class="practical-steps fade-up">
+    <div class="step-card">
+      <span class="step-arrow">◀</span>
+      <span class="step-text">ما الذي نجح؟</span>
+    </div>
+    <div class="step-card">
+      <span class="step-arrow">◀</span>
+      <span class="step-text">ما الذي يمكن تحسينه؟</span>
+    </div>
+    <div class="step-card">
+      <span class="step-arrow">◀</span>
+      <span class="step-text">كيف تطبقينه في موقف آخر؟</span>
+    </div>
+  </div>
+  <p class="practical-note fade-up">✏️ الهدف ليس الكمال، بل التقدم</p>
+</section>
+
+<!-- ═══════════════ TOOLS ═══════════════ -->
+<section id="tools">
+  <p class="sec-label fade-up">الأدوات</p>
+  <h2 class="sec-title fade-up">٣ أدوات تبدئين بها</h2>
+  <div class="gold-line fade-up"></div>
+  <div class="tools-grid fade-up">
+    <div class="tool-card">
+      <div class="tool-header">
+        <div class="tool-icon">📝</div>
+        <div class="tool-name">نموذج التأمل الأسبوعي</div>
+      </div>
+      <div class="tool-desc">
+        جدول المشاركة + الأسئلة الأربعة: ما تعلمته؟ أكبر تحدٍّ؟ خطوة للأسبوع القادم؟ ومستوى مشاركتك.
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header">
+        <div class="tool-icon">🎯</div>
+        <div class="tool-name">نموذج مهارات الوحدة</div>
+      </div>
+      <div class="tool-desc">
+        حددي المهارات المستهدفة في بداية الوحدة، واجعلي الطالبة تُقيّم تطورها فيها: الواجبات، الأنشطة، التفاعل.
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header">
+        <div class="tool-icon">💬</div>
+        <div class="tool-name">بنك الملاحظات السريع</div>
+      </div>
+      <div class="tool-desc">
+        <strong style="color:var(--gold-light)">للإنجاز:</strong> «هذا تقدم ملحوظ في...»<br>
+        <strong style="color:var(--gold-light)">للتحسين:</strong> «لاحظت أن... كيف نحسنها معاً؟»<br>
+        <strong style="color:var(--gold-light)">للتشجيع:</strong> «أرى الجهد الذي بذلته»
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TEMPLATE ═══════════════ -->
+<section id="template">
+  <p class="sec-label fade-up">نموذج جاهز للطباعة</p>
+  <h2 class="sec-title fade-up">نموذج التأمل الأسبوعي</h2>
+  <div class="gold-line fade-up"></div>
+  <div class="template-card fade-up">
+    <div class="template-title">📋 نموذج التأمل الأسبوعي</div>
+    <div class="template-q">
+      <div class="template-q-num">١</div>
+      <span>أفضل شيء تعلمته هذا الأسبوع؟ ................................</span>
+    </div>
+    <div class="template-q">
+      <div class="template-q-num">٢</div>
+      <span>أكبر تحدٍّ واجهته؟ ................................</span>
+    </div>
+    <div class="template-q">
+      <div class="template-q-num">٣</div>
+      <span>خطوة واحدة للأسبوع القادم؟ ................................</span>
+    </div>
+    <p style="font-size:0.78rem;font-weight:700;margin:0.8rem 0 0.4rem;color:var(--navy)">٤ مشاركتي هذا الأسبوع:</p>
+    <table class="template-table">
+      <tr>
+        <th>المحور</th>
+        <th>الخيار الأول</th>
+        <th>الخيار الثاني</th>
+        <th>الخيار الثالث</th>
+      </tr>
+      <tr>
+        <td>الواجبات</td>
+        <td>☐ كاملة</td>
+        <td>☐ متوسطة</td>
+        <td>☐ منخفضة</td>
+      </tr>
+      <tr>
+        <td>الأنشطة</td>
+        <td>☐ ممتاز</td>
+        <td>☐ جيد</td>
+        <td>☐ يحتاج جهد</td>
+      </tr>
+      <tr>
+        <td>التفاعل</td>
+        <td>☐ عالٍ</td>
+        <td>☐ متوسط</td>
+        <td>☐ منخفض</td>
+      </tr>
+    </table>
+  </div>
+  <div style="background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.25);border-radius:10px;padding:1rem;font-size:0.82rem;color:var(--text-muted);line-height:1.8;" class="fade-up">
+    <strong style="color:var(--gold)">💡 نصيحة للطالبة ذات المستوى المتدني أو الصامتة:</strong><br>
+    أعطيها خيار التسجيل الصوتي لدقيقة واحدة، أو اسأليها سؤالاً واحداً فقط: «شيء واحد تعلمتِه اليوم؟»
+  </div>
+</section>
+
+<!-- ═══════════════ RESULTS ═══════════════ -->
+<section id="results">
+  <p class="sec-label fade-up">قبل وبعد المبادرة</p>
+  <h2 class="sec-title fade-up">النتائج المقاسة</h2>
+  <div class="gold-line fade-up"></div>
+  <p class="results-context fade-up">تم قياس أثر التقييم المعكوس على أداء ٢٢ طالبة في مكوّنين أساسيين</p>
+
+  <div class="result-block fade-up">
+    <div class="result-block-header">📊 أولاً: التقويمات الشفهية والتحريرية (من ٢٠)</div>
+    <div class="result-stats">
+      <div class="stat-box before">
+        <div class="stat-num">14.55</div>
+        <div class="stat-label">قبل المبادرة</div>
+      </div>
+      <div class="stat-box after">
+        <div class="stat-num">18.36</div>
+        <div class="stat-label">بعد المبادرة</div>
+      </div>
+      <div class="stat-box pct">
+        <div class="stat-num">26%</div>
+        <div class="stat-label">نسبة التحسن</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-block fade-up">
+    <div class="result-block-header">📊 ثانياً: المهام الأدائية والمشاركة (من ٤٠)</div>
+    <div class="result-stats">
+      <div class="stat-box before">
+        <div class="stat-num">29.27</div>
+        <div class="stat-label">قبل المبادرة</div>
+      </div>
+      <div class="stat-box after">
+        <div class="stat-num">36.91</div>
+        <div class="stat-label">بعد المبادرة</div>
+      </div>
+      <div class="stat-box pct">
+        <div class="stat-num">26%</div>
+        <div class="stat-label">نسبة التحسن</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bar-chart fade-up" id="barChart">
+    <div class="bar-row">
+      <div class="bar-label">
+        <span>التقويمات الشفهية والتحريرية (من ٢٠)</span>
+        <span>14.5 → 18.4</span>
+      </div>
+      <div class="bar-track" style="height:14px">
+        <div class="bar-before" id="bb1" style="width:0%;height:100%"></div>
+        <div class="bar-after" id="ba1" style="width:0%;height:100%;margin-top:-14px"></div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">
+        <span>المهام الأدائية والمشاركة (من ٤٠)</span>
+        <span>29.3 → 36.9</span>
+      </div>
+      <div class="bar-track" style="height:14px">
+        <div class="bar-before" id="bb2" style="width:0%;height:100%"></div>
+        <div class="bar-after" id="ba2" style="width:0%;height:100%;margin-top:-14px"></div>
+      </div>
+    </div>
+    <div class="bar-legend">
+      <span><span class="leg-dot" style="background:#e74c3c"></span>قبل</span>
+      <span><span class="leg-dot" style="background:#2ecc71"></span>بعد</span>
+    </div>
+  </div>
+  <div style="font-size:0.82rem;color:var(--text-muted);text-align:center;line-height:1.8;" class="fade-up">
+    الخلاصة: لم تؤثر المبادرة فقط على الجانب التحريري والشفهي، بل حسّنت بشكل واضح المشاركة الصفية والمهام الأدائية أيضاً.
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section id="faq">
+  <p class="sec-label fade-up">ما تسأل عنه المعلمات</p>
+  <h2 class="sec-title fade-up">أسئلة شائعة</h2>
+  <div class="gold-line fade-up"></div>
+  <div class="fade-up" id="faqList">
+    <div class="faq-item" style="margin-bottom:0.8rem">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>كم يأخذ التقييم المعكوس من وقتي؟</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">البداية تحتاج ٣٠ دقيقة أسبوعياً فقط. بعد الأسبوع الثالث تنخفض لـ ١٥ دقيقة لأن الطالبات تعوّدن على النموذج.</div>
+    </div>
+    <div class="faq-item" style="margin-bottom:0.8rem">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>ماذا لو لم تأخذ الطالبة التقييم الذاتي بجدية؟</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">طبيعي في البداية. الحل: ابدئي بجلسة مناقشة واحدة وجهاً لوجه — تُظهر لها أنك تقرئين إجاباتها فعلاً.</div>
+    </div>
+    <div class="faq-item" style="margin-bottom:0.8rem">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>هل يؤثر على درجاتهن الرسمية؟</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">لا. التقييم المعكوس أداة تطوير وليس تقييماً رسمياً. يمكن ربطه بدرجة المشاركة فقط إذا أردت.</div>
+    </div>
+    <div class="faq-item" style="margin-bottom:0.8rem">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>كيف أتعامل مع الطالبة الصامتة؟</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">أعطيها خيار التسجيل الصوتي لدقيقة واحدة، أو اسأليها سؤالاً واحداً فقط: «شيء واحد تعلمتِه اليوم؟» — هذا يكسر الحاجز.</div>
+    </div>
+    <div class="faq-item" style="margin-bottom:0.8rem">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>هل يناسب جميع المراحل الدراسية؟</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">نعم، مع تعديل بسيط في الصياغة. للمراحل الابتدائية استخدمي الرسم بدل الكتابة. للمتوسطة والثانوية كما هو.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>ما الفرق بين التقييم المعكوس والتقييم الذاتي العادي؟</span>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">التقييم الذاتي يسأل «ماذا فعلتِ؟» أما التقييم المعكوس فيسأل «ماذا تعلّمتِ؟ وكيف تطوّرتِ؟ وما خطوتك القادمة؟» — الفرق في العمق والاستمرارية.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FINALE ═══════════════ -->
+<section id="finale">
+  <div class="star-bg"></div>
+  <p class="sec-label fade-up">في الختام</p>
+  <h2 class="finale-quote fade-up">الهدف ليس الكمال،<br>بل الاستمرارية ✨</h2>
+  <div class="finale-reminders fade-up">
+    <div class="reminder-pill">
+      <span class="reminder-icon">🎯</span>
+      <span>الهدف ليس الكمال، بل الاستمرارية</span>
+    </div>
+    <div class="reminder-pill">
+      <span class="reminder-icon">⚡</span>
+      <span>٧٠٪ من التأثير = ٣٠٪ من النظام تطبقينه صح</span>
+    </div>
+    <div class="reminder-pill">
+      <span class="reminder-icon">❤️</span>
+      <span>العلاقة مع الطالبات أهم من الأوراق</span>
+    </div>
+  </div>
+
+  <div style="width:100%;max-width:380px;" class="fade-up">
+    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;text-align:center">وبعد كل ما شاهدتِ... أين أنت الآن؟</p>
+    <div class="scale-cards" id="scaleCards2">
+      <div class="scale-card" onclick="selectScale2(this)"><span class="scale-num">١</span><span class="scale-text">لم أجرِّبه</span></div>
+      <div class="scale-card" onclick="selectScale2(this)"><span class="scale-num">٢</span><span class="scale-text">بدأت أفكر</span></div>
+      <div class="scale-card" onclick="selectScale2(this)"><span class="scale-num">٣</span><span class="scale-text">جرّبت أحياناً</span></div>
+      <div class="scale-card" onclick="selectScale2(this)"><span class="scale-num">٤</span><span class="scale-text">أطبّقه أحياناً</span></div>
+      <div class="scale-card" onclick="selectScale2(this)"><span class="scale-num">٥</span><span class="scale-text">أطبّقه دائماً</span></div>
+    </div>
+    <div id="changeMsg" style="display:none;margin-top:1rem;text-align:center;font-size:0.9rem;color:var(--gold);font-weight:700;background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.3);border-radius:10px;padding:0.8rem;"></div>
+  </div>
+</section>
+
+<script>
+// ── NAV DOTS ──
+const sections = document.querySelectorAll('section');
+const navDots = document.getElementById('navDots');
+const sectionIds = ['hero','question','scale','intro','comparison','beliefs','practical','tools','template','results','faq','finale'];
+
+sectionIds.forEach((id, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot';
+  dot.title = id;
+  dot.onclick = () => document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  navDots.appendChild(dot);
+});
+
+function updateDots() {
+  const dots = navDots.querySelectorAll('.nav-dot');
+  sectionIds.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top <= window.innerHeight/2 && rect.bottom >= window.innerHeight/2) {
+      dots.forEach(d => d.classList.remove('active'));
+      dots[i].classList.add('active');
+    }
+  });
+}
+
+// ── SCROLL ANIMATIONS ──
+function checkVisible() {
+  document.querySelectorAll('.fade-up').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.88) el.classList.add('visible');
+  });
+  updateDots();
+  // animate bars when results section visible
+  const barChart = document.getElementById('barChart');
+  if (barChart) {
+    const rect = barChart.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.9 && !barChart.dataset.animated) {
+      barChart.dataset.animated = '1';
+      setTimeout(() => {
+        document.getElementById('bb1').style.width = '72%';
+        document.getElementById('ba1').style.width = '91%';
+        document.getElementById('bb2').style.width = '73%';
+        document.getElementById('ba2').style.width = '92%';
+      }, 200);
+    }
+  }
+}
+
+window.addEventListener('scroll', checkVisible);
+checkVisible();
+
+// ── INTERACTIONS ──
+function selectPill(el) {
+  document.querySelectorAll('.q-pill').forEach(p => p.style.background = '');
+  el.style.background = 'rgba(201,162,39,0.2)';
+  el.style.borderColor = 'var(--gold)';
+}
+
+let scale1Val = 0;
+function selectScale(el) {
+  document.querySelectorAll('#scaleCards .scale-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  scale1Val = parseInt(el.querySelector('.scale-num').textContent.trim().charCodeAt(0)) - 1632;
+}
+
+let scale2Val = 0;
+function selectScale2(el) {
+  document.querySelectorAll('#scaleCards2 .scale-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  scale2Val = parseInt(el.querySelector('.scale-num').textContent.trim().charCodeAt(0)) - 1632;
+  showChangeMsg();
+}
+
+function showChangeMsg() {
+  const msg = document.getElementById('changeMsg');
+  msg.style.display = 'block';
+  if (scale1Val === 0) { msg.textContent = '✨ أهلاً بكِ في رحلة التغيير!'; return; }
+  const diff = scale2Val - scale1Val;
+  if (diff > 0) msg.textContent = `🎉 رائع! تقدّمتِ ${diff} ${diff === 1 ? 'خطوة' : 'خطوات'} للأمام!`;
+  else if (diff === 0) msg.textContent = '💪 أنتِ ثابتة على مسارك — الاستمرارية هي الفوز!';
+  else msg.textContent = '🤔 لا بأس — كل تأمل صادق هو خطوة للأمام!';
+}
+
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>
